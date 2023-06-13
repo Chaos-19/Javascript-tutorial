@@ -1,62 +1,21 @@
-var boxs = document.querySelectorAll('.wrapper');
-/*
-boxs.forEach(function(val, index) {
+'use strict'
+const bann = document.querySelector('.banner');
 
 
-  let clicked = false;
-  val.addEventListener('click', function(e) {
-
-    const container = [];
-
-    const sele = val.querySelectorAll('div');
-    e.target.style.fontSize = '5rem';
-
-    if (!(e.target.textContent == '')) {
-      throw new Error(`Error You can't click twice`)
-    }
-    if (!clicked) {
-      e.target.textContent = "X";
-      clicked = true;
-    }
-    else {
-      e.target.textContent = "️O";
-      clicked = false;
-    }
+const bordCell = document.getElementsByClassName('item');
 
 
-    for (let i = 0; i < 9; i++) {
-      container.push(sele[i]);
-    }
-    const boxValue = container.map((e) => { return e.textContent; });
+var winCount = 0;
 
-    const cellValue =[] //create3x3Array(boxValue);
+const winCountBord = document.querySelectorAll('.state')
 
 
-    const winner = []//checkWinningLine(cellValue);
-
-    if (winner == 'X') {
-      console.log('X WIN 🏆 ')
-      document.querySelector('.banner').textContent = 'X WIN 🏆 ';
-      document.querySelector('.banner').style.transform = 'scale(1)';
-    }
-    if (winner == '️O') {
-      console.log('O WIN 🏆')
-    }
-    console.log(winner);
-  })
-})
-*/
-
-
-
-var bordCell = document.getElementsByClassName('item');
 for (var i = 0; i < bordCell.length; i++) {
   bordCell[i].addEventListener('click', clickHandler);
 }
 
 var currentPlayer = 'X';
 var cellValue = [];
-
 
 function clickHandler(event) {
   var targetContent = event.target;
@@ -71,7 +30,21 @@ function clickHandler(event) {
 
 
   if (checkWinner()) {
-    onWinner(currentPlayer)
+    onWinner(currentPlayer, 'Win');
+    console.table(cellValue)
+  }
+
+
+  let boo = (function() {
+    for (var i = 0; i < cellValue.length; i++) { if (!cellValue[i]) return true; }
+  }());
+
+
+  const draw = cellValue.length === 9 && !boo;
+
+
+  if (draw) {
+    onWinner("X 0", 'Draw');
   }
 
 
@@ -85,27 +58,53 @@ function clickHandler(event) {
 
 
 
-document.querySelector('.btn').addEventListener('click', restButn)
+document.querySelector('.btn').addEventListener('click', resetBord);
 
-function onWinner(text) {
-  let bann = document.querySelector('.banner');
+function onWinner(text, status) {
+
+  bann.style.display = 'flex';
   bann.style.transform = 'scale(1)';
+
+  const statusBord = document.createElement('p');
+  statusBord.textContent = status;
+  statusBord.style.color = '#fff';
   bann.textContent = text;
+  bann.appendChild(statusBord);
+
 }
 
 function checkWinner() {
   var winningCompination = [
    [0, 1, 2], [3, 4, 5], [6, 7, 8],
-   [0, 3, 6], [1, 4, 7], [2, 3, 8],
+   [0, 3, 6], [1, 4, 7], [2, 5, 8],
    [0, 4, 8], [2, 4, 6]
 
     ];
 
   for (let combination of winningCompination) {
     const [a, b, c] = combination;
-    if (cellValue[a] !== '' && cellValue[a] === cellValue[b] && cellValue[a] === cellValue[c]) {
+
+    if (cellValue[a] !== undefined && cellValue[a] === cellValue[b] && cellValue[a] === cellValue[c]) {
       return true;
     }
   }
   return false;
+}
+
+
+
+function resetBord() {
+
+  console.log(cellValue)
+
+  bann.style.display = 'none';
+  bann.style.transform = 'scale(0)';
+
+
+  for (var key in bordCell) {
+    if(bordCell[key].textContent)
+    bordCell[key].textContent = '';
+  }
+  cellValue.length = 0;
+
 }
