@@ -5,10 +5,6 @@ const bann = document.querySelector('.banner');
 const bordCell = document.getElementsByClassName('item');
 
 
-var winCount = 0;
-
-
-
 const winCountBord = document.querySelectorAll('.state')
 
 
@@ -38,12 +34,12 @@ function clickHandler(event) {
 
   //
   if (player.length == 0) {
-    player.push({ name: currentPlayer, win: winCount });
+    player.push({ name: currentPlayer, win: 0 });
   }
   const existingPlayer = player.find(p => p.name === currentPlayer);
 
   if (!existingPlayer) {
-    player.push({ name: currentPlayer, win: winCount });
+    player.push({ name: currentPlayer, win: 0 });
 
   }
 
@@ -59,26 +55,21 @@ function clickHandler(event) {
     const existingPlayer = player.find((p, ind) => { if (p.name === currentPlayer) return p; });
 
     existingPlayer.win = existingPlayer.win + 1;
+    winCountBord.forEach((e, i) => {
+      e.textContent = player[i].win;
+      console.log(i)
+    })
 
-
-
-    
-      winCountBord.forEach((e,i) => {
-   e.textContent = player[i].win;
-   console.log(i)
-      })
-    
-
+    console.log("winn");
   }
   let boo = (function() {
     for (let i = 0; i < cellValue.length; i++) { if (!cellValue[i]) return true; }
   }());
 
+  let draw = cellValue.length === 9 && !boo;
 
-  const draw = cellValue.length === 9 && !boo;
-
-
-  if (draw) {
+  console.log('Draw ', draw);
+  if (draw && !checkWinner()) {
     onWinner("X 0", 'Draw');
   }
 
@@ -88,10 +79,6 @@ function clickHandler(event) {
   } else {
     currentPlayer = 'X';
   }
-
-
-
-
 
 }
 
@@ -124,6 +111,8 @@ function checkWinner() {
     const [a, b, c] = combination;
 
     if (cellValue[a] !== undefined && cellValue[a] === cellValue[b] && cellValue[a] === cellValue[c]) {
+
+      console.log(a, b, c)
       return true;
     }
   }
