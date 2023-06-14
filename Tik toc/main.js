@@ -16,11 +16,8 @@ let currentPlayer = 'X';
 
 
 const player = [];
-const players = {}
 
 const cellValue = [];
-
-
 
 function clickHandler(event) {
   const targetContent = event.target;
