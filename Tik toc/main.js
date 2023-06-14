@@ -7,22 +7,46 @@ const bordCell = document.getElementsByClassName('item');
 
 var winCount = 0;
 
+
+
 const winCountBord = document.querySelectorAll('.state')
 
 
-for (var i = 0; i < bordCell.length; i++) {
+for (let i = 0; i < bordCell.length; i++) {
   bordCell[i].addEventListener('click', clickHandler);
 }
 
-var currentPlayer = 'X';
-var cellValue = [];
+let currentPlayer = 'X';
+
+
+const player = [];
+const players = {}
+
+const cellValue = [];
+
+
 
 function clickHandler(event) {
-  var targetContent = event.target;
-  var index = Array.from(bordCell).indexOf(event.target);
+  const targetContent = event.target;
+  const index = Array.from(bordCell).indexOf(event.target);
 
 
   cellValue[index] = currentPlayer;
+
+
+  event.target.style = `font-size: 4rem;`
+
+  //
+  if (player.length == 0) {
+    player.push({ name: currentPlayer, win: winCount });
+  }
+  const existingPlayer = player.find(p => p.name === currentPlayer);
+
+  if (!existingPlayer) {
+    player.push({ name: currentPlayer, win: winCount });
+
+  }
+
 
   if (!event.target.textContent)
     event.target.textContent = currentPlayer == 'X' ? 'X' : 'O';
@@ -31,12 +55,23 @@ function clickHandler(event) {
 
   if (checkWinner()) {
     onWinner(currentPlayer, 'Win');
-    console.table(cellValue)
+
+    const existingPlayer = player.find((p, ind) => { if (p.name === currentPlayer) return p; });
+
+    existingPlayer.win = existingPlayer.win + 1;
+
+
+
+    
+      winCountBord.forEach((e,i) => {
+   e.textContent = player[i].win;
+   console.log(i)
+      })
+    
+
   }
-
-
   let boo = (function() {
-    for (var i = 0; i < cellValue.length; i++) { if (!cellValue[i]) return true; }
+    for (let i = 0; i < cellValue.length; i++) { if (!cellValue[i]) return true; }
   }());
 
 
@@ -53,6 +88,10 @@ function clickHandler(event) {
   } else {
     currentPlayer = 'X';
   }
+
+
+
+
 
 }
 
@@ -74,7 +113,7 @@ function onWinner(text, status) {
 }
 
 function checkWinner() {
-  var winningCompination = [
+  const winningCompination = [
    [0, 1, 2], [3, 4, 5], [6, 7, 8],
    [0, 3, 6], [1, 4, 7], [2, 5, 8],
    [0, 4, 8], [2, 4, 6]
@@ -101,9 +140,9 @@ function resetBord() {
   bann.style.transform = 'scale(0)';
 
 
-  for (var key in bordCell) {
-    if(bordCell[key].textContent)
-    bordCell[key].textContent = '';
+  for (let key in bordCell) {
+    if (bordCell[key].textContent)
+      bordCell[key].textContent = '';
   }
   cellValue.length = 0;
 
