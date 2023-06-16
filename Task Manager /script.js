@@ -16,7 +16,7 @@ root.appendChild(wrapper);
 
 const input = document.createElement("input");
 
-input.style =`font-size: 22px; padding:5px; `
+input.style = `font-size: 22px; padding:5px; `
 
 const addBtn = document.createElement("button");
 addBtn.style = `font-size: 24px;padding:5px ;margin-left: 5px;`;
@@ -59,8 +59,8 @@ function renderTask() {
 
     wrappBtn.appendChild(deletBtn);
     wrappBtn.appendChild(compBtn);
-    
-    wrappBtn.style =`display: flex ;justify-content center;align-items: center ;gap:10px ;`
+
+    wrappBtn.style = `display: flex ;justify-content center;align-items: center ;gap:10px ;`
 
 
     deletBtn.addEventListener("click", function(e) {
@@ -74,20 +74,22 @@ function renderTask() {
     });
 
     if (value.status === "complete") {
+      li.style = `text-decoration: line-through;`
       container.style = `
-      
       display:flex;
       justify-content:space-between;
-      text-decoration: line-through;`;
+    
+      `;
+      
     } else {
       container.style = ` 
            display:flex;
            justify-content:space-between;`;
-    
+      li.style = `font-size: 25px;color: #fff;`
     }
 
     container.appendChild(wrappBtn);
-    li.style = `font-size: 25px;color: #fff;`
+
     li.appendChild(container);
 
     ul.appendChild(li);
