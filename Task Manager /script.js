@@ -61,7 +61,8 @@ function renderTask() {
     wrappBtn.appendChild(compBtn);
 
     wrappBtn.style = `display: flex ;justify-content center;align-items: center ;gap:10px ;`
-
+   
+   li.style = `font-size: 25px;color: #fff;`
 
     deletBtn.addEventListener("click", function(e) {
       arr.splice(index, 1);
@@ -74,18 +75,16 @@ function renderTask() {
     });
 
     if (value.status === "complete") {
-      li.style = `text-decoration: line-through;`
       container.style = `
       display:flex;
       justify-content:space-between;
-    
+      text-decoration: line-through
       `;
       
     } else {
       container.style = ` 
            display:flex;
            justify-content:space-between;`;
-      li.style = `font-size: 25px;color: #fff;`
     }
 
     container.appendChild(wrappBtn);
