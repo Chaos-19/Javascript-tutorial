@@ -93,5 +93,4 @@ function renderTask() {
 
     ul.appendChild(li);
   });
-
 }
