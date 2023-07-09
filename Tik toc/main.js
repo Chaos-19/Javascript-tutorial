@@ -70,12 +70,14 @@ function clickHandler(event) {
     onWinner("X 0", 'Draw');
   }
 
+  autoPlayer();
 
   if (currentPlayer == 'X') {
     currentPlayer = 'O';
   } else {
     currentPlayer = 'X';
   }
+
 
 }
 
@@ -133,3 +135,25 @@ function resetBord() {
   cellValue.length = 0;
 
 }
+
+
+/* Auto player */
+
+function autoPlayer() {
+
+  //check for the game start 
+  let isPlayerStart = cellValue.filter((v) => {
+    return v != undefined;
+  }).length == 1 ? true : false;
+
+  console.log(isPlayerStart);
+  if (isPlayerStart) {
+    const cellNo = Math.trunc((Math.random() * 8 + 1));
+    bordCell[cellNo].click();
+    bordCell[cellNo].textContent = currentPlayer == 'X' ? 'X' : 'O';
+  } else {
+    
+
+  }
+}
+console.log();
