@@ -13,7 +13,7 @@ for (let i = 0; i < bordCell.length; i++) {
 }
 
 let currentPlayer = 'X';
-
+var playerOneMarkedPosition = [];
 
 const player = [];
 
@@ -45,6 +45,11 @@ function clickHandler(event) {
     event.target.textContent = currentPlayer == 'X' ? 'X' : 'O';
 
 
+  playerOneMarkedPosition = cellValue.map((v, i) => {
+    return v == 'X' ? i : undefined;
+  })
+
+
 
   if (checkWinner()) {
     onWinner(currentPlayer, 'Win');
@@ -54,10 +59,9 @@ function clickHandler(event) {
     existingPlayer.win = existingPlayer.win + 1;
     winCountBord.forEach((e, i) => {
       e.textContent = player[i].win;
-      console.log(i)
+      //console.log(i)
     })
 
-    console.log("winn");
   }
   let boo = (function() {
     for (let i = 0; i < cellValue.length; i++) { if (!cellValue[i]) return true; }
@@ -70,7 +74,7 @@ function clickHandler(event) {
     onWinner("X 0", 'Draw');
   }
 
-  autoPlayer();
+
 
   if (currentPlayer == 'X') {
     currentPlayer = 'O';
@@ -78,7 +82,7 @@ function clickHandler(event) {
     currentPlayer = 'X';
   }
 
-
+  AI_Player();
 }
 
 
@@ -111,7 +115,6 @@ function checkWinner() {
 
     if (cellValue[a] !== undefined && cellValue[a] === cellValue[b] && cellValue[a] === cellValue[c]) {
 
-      console.log(a, b, c)
       return true;
     }
   }
@@ -133,13 +136,13 @@ function resetBord() {
       bordCell[key].textContent = '';
   }
   cellValue.length = 0;
-
+  currentPlayer ='X'
 }
 
 
 /* Auto player */
 
-function autoPlayer() {
+function AI_Player() {
 
   //check for the game start 
   let isPlayerStart = cellValue.filter((v) => {
@@ -150,10 +153,40 @@ function autoPlayer() {
   if (isPlayerStart) {
     const cellNo = Math.trunc((Math.random() * 8 + 1));
     bordCell[cellNo].click();
-    bordCell[cellNo].textContent = currentPlayer == 'X' ? 'X' : 'O';
-  } else {
+    bordCell[cellNo].textContent = currentPlayer != 'X' ? 'X' : 'O';
     
+  }
+  else {
 
+    var playOneIndex = filterIndex();
+
+    console.log(playOneIndex);
   }
 }
-console.log();
+
+
+function filterIndex() {
+
+  return cellValue.map((v, i) => { if (v == 'X') return i; }).filter((v) => { return v != undefined && v != 'O'; })
+}
+
+function findNextPosition() {
+
+  const winningCompination = [
+     [0, 1, 2], [3, 4, 5], [6, 7, 8],
+     [0, 3, 6], [1, 4, 7], [2, 5, 8],
+     [0, 4, 8], [2, 4, 6]
+
+      ];
+
+  for (let combination of winningCompination) {
+    const [a, b, c] = combination;
+
+    if (playerOneMarkedPosition[a] !== undefined &&
+      playerOneMarkedPosition[a] === playerOneMarkedPosition[b] && playerOneMarkedPosition[a] === playerOneMarkedPosition[c]) {
+
+      return true;
+    }
+  }
+  return false;
+}
