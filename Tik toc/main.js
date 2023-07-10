@@ -88,8 +88,8 @@ document.querySelector('.btn').addEventListener('click', resetBord);
 function onWinner(text, status) {
 
   bann.style.display = 'flex';
-  //bann.style.transform = 'scale(1)';
-  console.log("Winner ", text);
+  bann.style.transform = 'scale(1)';
+  console.log("Winner : ", text);
   const statusBord = document.createElement('p');
   statusBord.textContent = status;
   statusBord.style.color = '#fff';
@@ -137,22 +137,24 @@ function resetBord() {
 
 function AI_Player() {
 
-  //check for the game start 
+  /*check for the game start  
+  */
   let isPlayerStart = cellValue.filter((v) => {
     return v != undefined;
-  }).length == 1 ? true : false;
+  }).length == 1 ? true : false; // will check if only one position marked 
+  
   let firstMarkedCell = cellValue.findIndex((v, i) => {
     if (v != undefined) {
       return i;
     }
-  })
+  })// grap the index of the first marked position
 
-  //console.log("isPlayerStart  = ", isPlayerStart);
 
-  if (isPlayerStart) {
 
+  if (isPlayerStart) { 
+  /* will make the first AI move */
     while (true) {
-      let cellNo = Math.trunc((Math.random() * 8) + 1);
+ let cellNo = Math.trunc((Math.random() * 8) + 1);
 
       if (!bordCell[cellNo].textContent && firstMarkedCell != cellNo) {
         bordCell[cellNo].click();
@@ -161,10 +163,14 @@ function AI_Player() {
         break;
       }
     }
-  } else {
-    var playOneIndex = filterIndex();
+
+  } else {   /*  after the first move find out the position make the player win */
+  
+    //var playOneIndex = filterIndex(); 
+    
     let index = findNextPosition();
-    //console.log("Position ", index);
+    
+  
     if (index) {
       console.log(" Line 164 blocking Move ", currentPlayer);
       bordCell[index].click();
@@ -178,7 +184,7 @@ function AI_Player() {
     } else if ((!index) && (currentPlayer === 'O')) {
 
       while (true) {
-        var cellNo = Math.trunc((Math.random() * 8 + 1));
+  let cellNo = Math.trunc((Math.random()*8)+1);
         if (!bordCell[cellNo].textContent) {
           console.log(" Line 176 Randomly  ", currentPlayer);
           bordCell[cellNo].click();
@@ -194,21 +200,16 @@ function AI_Player() {
 
 }
 
-
-function filterIndex() {
-
-  return cellValue.map((v, i) => { if (v == 'X') return i; }).filter((v) => { return v != undefined && v != 'O'; })
-}
+/* function return the possibly win cell index the play can make in next turn */
 
 function findNextPosition() {
-
+  
   const winningCompination = [
      [0, 1, 2], [3, 4, 5], [6, 7, 8],
      [0, 3, 6], [1, 4, 7], [2, 5, 8],
      [0, 4, 8], [2, 4, 6]
 
       ];
-
 
   for (let combination of winningCompination) {
     const [a, b, c] = combination;
