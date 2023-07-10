@@ -46,7 +46,7 @@ function clickHandler(event) {
 
 
   playerOneMarkedPosition = cellValue.map((v, i) => {
-    return v == 'X' ? i : undefined;
+    return v == 'X' ? i : v == 'O' ? -1 : undefined;
   })
 
 
@@ -136,7 +136,7 @@ function resetBord() {
       bordCell[key].textContent = '';
   }
   cellValue.length = 0;
-  currentPlayer ='X'
+  currentPlayer = 'X'
 }
 
 
@@ -154,13 +154,22 @@ function AI_Player() {
     const cellNo = Math.trunc((Math.random() * 8 + 1));
     bordCell[cellNo].click();
     bordCell[cellNo].textContent = currentPlayer != 'X' ? 'X' : 'O';
-    
+
   }
   else {
 
     var playOneIndex = filterIndex();
-
-    console.log(playOneIndex);
+    let index = findNextPosition();
+    console.log("Position ",findNextPosition());
+    if (index) {
+      bordCell[index].click();
+      bordCell[index].textContent = currentPlayer != 'X' ? 'X' : 'O';
+  playerOneMarkedPosition.forEach((v, i) => {
+        if (v != -1 && v != undefined) {
+      playerOneMarkedPosition.splice(i, 1, -1)
+        }})
+    
+    }
   }
 }
 
@@ -179,14 +188,54 @@ function findNextPosition() {
 
       ];
 
+
   for (let combination of winningCompination) {
     const [a, b, c] = combination;
 
-    if (playerOneMarkedPosition[a] !== undefined &&
-      playerOneMarkedPosition[a] === playerOneMarkedPosition[b] && playerOneMarkedPosition[a] === playerOneMarkedPosition[c]) {
+    if ((playerOneMarkedPosition[a] != undefined &&
+        playerOneMarkedPosition[a] != -1) && (playerOneMarkedPosition[b] != undefined &&
+        playerOneMarkedPosition[b] != -1)) {
+      console.log(" her C", c, a, b);
+      console.log(playerOneMarkedPosition[a]);
+      console.log(playerOneMarkedPosition[b]);
+      console.log(playerOneMarkedPosition[c]);
+      return c;
 
-      return true;
+    }
+    else if ((playerOneMarkedPosition[b] != undefined &&
+        playerOneMarkedPosition[b] != -1) && (playerOneMarkedPosition[c] != undefined &&
+        playerOneMarkedPosition[c] != -1)) {
+
+      return a;
+
+    }
+    else if ((playerOneMarkedPosition[a] != undefined &&
+        playerOneMarkedPosition[a] != -1) && (playerOneMarkedPosition[c] != undefined &&
+        playerOneMarkedPosition[c] != -1)) {
+
+
+      return b;
+
     }
   }
-  return false;
+}
+
+function transform(arr) {
+  const newArray = [];
+  if (arr.length < 1)
+    return;
+  var temp = [];
+  for (var i = 0; i < arr.length; i++) {
+    if (temp.length <= 2) {
+      temp.push(arr[i])
+    } else {
+      newArray.push(temp);
+      temp = [];
+      temp.push(arr[i]);
+    }
+  }
+  if (temp) {
+    newArray.push(temp);
+  }
+  return newArray;
 }
