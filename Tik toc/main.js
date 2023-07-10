@@ -88,8 +88,8 @@ document.querySelector('.btn').addEventListener('click', resetBord);
 function onWinner(text, status) {
 
   bann.style.display = 'flex';
- //bann.style.transform = 'scale(1)';
-console.log("Winner " , text);
+  //bann.style.transform = 'scale(1)';
+  console.log("Winner ", text);
   const statusBord = document.createElement('p');
   statusBord.textContent = status;
   statusBord.style.color = '#fff';
@@ -151,12 +151,15 @@ function AI_Player() {
 
   if (isPlayerStart) {
 
-    const cellNo = Math.trunc((Math.random() * 8) + 1);
+    while (true) {
+      let cellNo = Math.trunc((Math.random() * 8) + 1);
 
-    if (!bordCell[cellNo].textContent && firstMarkedCell != cellNo) {
-      bordCell[cellNo].click();
-      bordCell[cellNo].textContent = currentPlayer;
-      console.log(" Line 157  first Move  p ", currentPlayer);
+      if (!bordCell[cellNo].textContent && firstMarkedCell != cellNo) {
+        bordCell[cellNo].click();
+        bordCell[cellNo].textContent = currentPlayer;
+        console.log(" Line 157  first Move  p ", currentPlayer);
+        break;
+      }
     }
   } else {
     var playOneIndex = filterIndex();
