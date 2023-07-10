@@ -1,4 +1,4 @@
-'use strict'
+//'use strict'
 const bann = document.querySelector('.banner');
 
 
@@ -42,7 +42,7 @@ function clickHandler(event) {
 
 
   if (!event.target.textContent) {
-    event.target.textContent = currentPlayer == 'X' ? 'X' : 'O';
+    event.target.textContent = currentPlayer; //== 'X' ? 'X' : 'O';
 
 
     playerOneMarkedPosition = cellValue.map((v, i) => {
@@ -73,15 +73,9 @@ function clickHandler(event) {
       onWinner("X 0", 'Draw');
     }
 
-
-AI_Player();
-    if (currentPlayer == 'X') {
-      currentPlayer = 'O';
-    } else {
-      currentPlayer = 'X';
-    }
-
-
+    currentPlayer = currentPlayer == 'X' ? 'O' : 'X'
+    AI_Player();
+    currentPlayer = currentPlayer == 'X' ? 'O' : 'X'
   }
 }
 
@@ -92,7 +86,7 @@ document.querySelector('.btn').addEventListener('click', resetBord);
 function onWinner(text, status) {
 
   bann.style.display = 'flex';
-  //bann.style.transform = 'scale(1)';
+  // bann.style.transform = 'scale(1)';
 
   const statusBord = document.createElement('p');
   statusBord.textContent = status;
@@ -124,9 +118,6 @@ function checkWinner() {
 
 
 function resetBord() {
-
-  console.log(cellValue)
-
   bann.style.display = 'none';
   bann.style.transform = 'scale(0)';
 
@@ -149,40 +140,44 @@ function AI_Player() {
     return v != undefined;
   }).length == 1 ? true : false;
 
-  console.log(isPlayerStart);
+ 
   if (isPlayerStart) {
     const cellNo = Math.trunc((Math.random() * 8 + 1));
     bordCell[cellNo].click();
-    bordCell[cellNo].textContent = currentPlayer != 'X' ? 'X' : 'O';
+    bordCell[cellNo].textContent = currentPlayer;
+    console.log(" Line 157  first Move  p ", currentPlayer);
 
-  }
-  else {
-
+  } else {
     var playOneIndex = filterIndex();
     let index = findNextPosition();
-    console.log("Position ", findNextPosition());
+    //console.log("Position ", index);
     if (index) {
+      console.log(" Line 164 blocking Move ", currentPlayer);
       bordCell[index].click();
-      bordCell[index].textContent = currentPlayer != 'X' ? 'X' : 'O';
+      bordCell[index].textContent = currentPlayer;
       playerOneMarkedPosition.forEach((v, i) => {
         if (v != -1 && v != undefined) {
           playerOneMarkedPosition.splice(i, 1, -1)
         }
       })
-
-    } else if (!index && currentPlayer == 'O') {
+      index = undefined;
+    } else if ((!index) && (currentPlayer === 'O')) {
 
       while (true) {
         var cellNo = Math.trunc((Math.random() * 8 + 1));
-        console.log("Random index ", cellNo);
-        if (bordCell[cellNo].textContent) {
+        if (!bordCell[cellNo].textContent) {
+          console.log(" Line 176 Randomly  ", currentPlayer);
           bordCell[cellNo].click();
-          bordCell[cellNo].textContent = currentPlayer != 'X' ? 'X' : 'O';
+          bordCell[cellNo].textContent = currentPlayer;
           break;
         }
       }
+
+
+
     }
   }
+
 }
 
 
