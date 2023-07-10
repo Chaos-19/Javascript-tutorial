@@ -26,6 +26,8 @@ function clickHandler(event) {
 
   cellValue[index] = currentPlayer;
 
+  console.log("CellValue ");
+  console.table(cellValue);
 
   event.target.style = `font-size: 4rem;`
 
@@ -86,8 +88,8 @@ document.querySelector('.btn').addEventListener('click', resetBord);
 function onWinner(text, status) {
 
   bann.style.display = 'flex';
-  // bann.style.transform = 'scale(1)';
-
+ //bann.style.transform = 'scale(1)';
+console.log("Winner " , text);
   const statusBord = document.createElement('p');
   statusBord.textContent = status;
   statusBord.style.color = '#fff';
@@ -139,14 +141,23 @@ function AI_Player() {
   let isPlayerStart = cellValue.filter((v) => {
     return v != undefined;
   }).length == 1 ? true : false;
+  let firstMarkedCell = cellValue.findIndex((v, i) => {
+    if (v != undefined) {
+      return i;
+    }
+  })
 
- 
+  //console.log("isPlayerStart  = ", isPlayerStart);
+
   if (isPlayerStart) {
-    const cellNo = Math.trunc((Math.random() * 8 + 1));
-    bordCell[cellNo].click();
-    bordCell[cellNo].textContent = currentPlayer;
-    console.log(" Line 157  first Move  p ", currentPlayer);
 
+    const cellNo = Math.trunc((Math.random() * 8) + 1);
+
+    if (!bordCell[cellNo].textContent && firstMarkedCell != cellNo) {
+      bordCell[cellNo].click();
+      bordCell[cellNo].textContent = currentPlayer;
+      console.log(" Line 157  first Move  p ", currentPlayer);
+    }
   } else {
     var playOneIndex = filterIndex();
     let index = findNextPosition();
