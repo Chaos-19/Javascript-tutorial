@@ -41,48 +41,48 @@ function clickHandler(event) {
   }
 
 
-  if (!event.target.textContent)
+  if (!event.target.textContent) {
     event.target.textContent = currentPlayer == 'X' ? 'X' : 'O';
 
 
-  playerOneMarkedPosition = cellValue.map((v, i) => {
-    return v == 'X' ? i : v == 'O' ? -1 : undefined;
-  })
-
-
-
-  if (checkWinner()) {
-    onWinner(currentPlayer, 'Win');
-
-    const existingPlayer = player.find((p, ind) => { if (p.name === currentPlayer) return p; });
-
-    existingPlayer.win = existingPlayer.win + 1;
-    winCountBord.forEach((e, i) => {
-      e.textContent = player[i].win;
-      //console.log(i)
+    playerOneMarkedPosition = cellValue.map((v, i) => {
+      return v == 'X' ? i : v == 'O' ? -1 : undefined;
     })
 
+
+
+    if (checkWinner()) {
+      onWinner(currentPlayer, 'Win');
+
+      const existingPlayer = player.find((p, ind) => { if (p.name === currentPlayer) return p; });
+
+      existingPlayer.win = existingPlayer.win + 1;
+      winCountBord.forEach((e, i) => {
+        e.textContent = player[i].win;
+      })
+      return;
+    }
+    let boo = (function() {
+      for (let i = 0; i < cellValue.length; i++) { if (!cellValue[i]) return true; }
+    }());
+
+    let draw = cellValue.length === 9 && !boo;
+
+
+    if (draw && !checkWinner()) {
+      onWinner("X 0", 'Draw');
+    }
+
+
+AI_Player();
+    if (currentPlayer == 'X') {
+      currentPlayer = 'O';
+    } else {
+      currentPlayer = 'X';
+    }
+
+
   }
-  let boo = (function() {
-    for (let i = 0; i < cellValue.length; i++) { if (!cellValue[i]) return true; }
-  }());
-
-  let draw = cellValue.length === 9 && !boo;
-
-  console.log('Draw ', draw);
-  if (draw && !checkWinner()) {
-    onWinner("X 0", 'Draw');
-  }
-
-
-
-  if (currentPlayer == 'X') {
-    currentPlayer = 'O';
-  } else {
-    currentPlayer = 'X';
-  }
-
-  AI_Player();
 }
 
 
@@ -92,7 +92,7 @@ document.querySelector('.btn').addEventListener('click', resetBord);
 function onWinner(text, status) {
 
   bann.style.display = 'flex';
-  bann.style.transform = 'scale(1)';
+  //bann.style.transform = 'scale(1)';
 
   const statusBord = document.createElement('p');
   statusBord.textContent = status;
@@ -160,15 +160,27 @@ function AI_Player() {
 
     var playOneIndex = filterIndex();
     let index = findNextPosition();
-    console.log("Position ",findNextPosition());
+    console.log("Position ", findNextPosition());
     if (index) {
       bordCell[index].click();
       bordCell[index].textContent = currentPlayer != 'X' ? 'X' : 'O';
-  playerOneMarkedPosition.forEach((v, i) => {
+      playerOneMarkedPosition.forEach((v, i) => {
         if (v != -1 && v != undefined) {
-      playerOneMarkedPosition.splice(i, 1, -1)
-        }})
-    
+          playerOneMarkedPosition.splice(i, 1, -1)
+        }
+      })
+
+    } else if (!index && currentPlayer == 'O') {
+
+      while (true) {
+        var cellNo = Math.trunc((Math.random() * 8 + 1));
+        console.log("Random index ", cellNo);
+        if (bordCell[cellNo].textContent) {
+          bordCell[cellNo].click();
+          bordCell[cellNo].textContent = currentPlayer != 'X' ? 'X' : 'O';
+          break;
+        }
+      }
     }
   }
 }
@@ -194,24 +206,21 @@ function findNextPosition() {
 
     if ((playerOneMarkedPosition[a] != undefined &&
         playerOneMarkedPosition[a] != -1) && (playerOneMarkedPosition[b] != undefined &&
-        playerOneMarkedPosition[b] != -1)) {
-      console.log(" her C", c, a, b);
-      console.log(playerOneMarkedPosition[a]);
-      console.log(playerOneMarkedPosition[b]);
-      console.log(playerOneMarkedPosition[c]);
+        playerOneMarkedPosition[b] != -1 && playerOneMarkedPosition[c] == undefined)) {
+
       return c;
 
     }
     else if ((playerOneMarkedPosition[b] != undefined &&
         playerOneMarkedPosition[b] != -1) && (playerOneMarkedPosition[c] != undefined &&
-        playerOneMarkedPosition[c] != -1)) {
+        playerOneMarkedPosition[c] != -1 && playerOneMarkedPosition[a] == undefined)) {
 
       return a;
 
     }
     else if ((playerOneMarkedPosition[a] != undefined &&
         playerOneMarkedPosition[a] != -1) && (playerOneMarkedPosition[c] != undefined &&
-        playerOneMarkedPosition[c] != -1)) {
+        playerOneMarkedPosition[c] != -1 && playerOneMarkedPosition[b] == undefined)) {
 
 
       return b;
