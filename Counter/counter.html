@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="chaos kalkidan Getachew">
+  <meta name="generator" content="Hugo 0.84.0">
+  <title>Bootstrap</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- custom css -->
+  <style>
+    .container {
+      height: 100vh;
+    }
+    #counter{
+      font-size: 8rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container d-flex justify-content-center align-items-center">
+    <div class="row border border-secondary">
+      <div class="col py-3 px-5">
+        <h1 class="text-uppercase text-center display-1">counter</h1>
+        <p class="lead text-center fw-bold" id="counter">0</p>
+        <div class="btn-group w-100 text-align-center">
+          <button class="btn rounded btn-secondary me-2  text-capitalize " id="increase">increase</button>
+          <button class="btn rounded ms-2 btn-secondary text-capitalize" id="decrease">decrease</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+<script src="main.js"></script>
+</body>
+
+</html>
